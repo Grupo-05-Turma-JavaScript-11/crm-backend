@@ -26,7 +26,7 @@ export class MedicoService {
         return medico;
     }
 
-    async findByName(nome: string): Promise<Medico[]> {
+    async findAllByName(nome: string): Promise<Medico[]> {
         return await this.medicoRepository.find({
             where:{
                 nome: ILike(`%${nome}%`)

@@ -23,6 +23,6 @@ export class Medico {
 
     @IsNotEmpty() // Validador de Objeto
     @Column({ length: 100, nullable: false  }) //Tamanho Máximo: 100 | Regra do MySQL - NOT NULL
-    plantao: string
+    turno_trabalho: string
 }
 

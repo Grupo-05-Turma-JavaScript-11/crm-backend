@@ -1,11 +1,12 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { Medico } from "../entities/medico.entity";
 import { DeleteResult } from "typeorm";
+import { MedicoService } from "../services/medico.service";
 
 
 @Controller("/medicos")
 export class MedicoController{
-    constructor(private readonly medicoService){}
+    constructor(private readonly medicoService: MedicoService){}
 
     @Get() // Indica qual tipo de Requisição esse método é executado
     @HttpCode(HttpStatus.OK)  // monta a Resposta HTTP para o Front com o status 200
