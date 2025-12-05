@@ -1,5 +1,6 @@
-import { Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { Medico } from "../entities/medico.entity";
+import { DeleteResult } from "typeorm";
 
 
 @Controller("/medicos")
@@ -23,32 +24,23 @@ export class MedicoController{
     findAllByName(@Param('nome') nome: string): Promise<Medico[]>{
         return this.medicoService.findAllByName(nome)
     }
-}
 
-/*
-
-@Post()
-    @HttpCode(HttpStatus.CREATED)  // httpstatus: 201
-    create(@Body() medico: Medico): Promise<Medico>{ // @body -> enviar informações no corpo da solicitação
+   @Post() 
+    @HttpCode(HttpStatus.CREATED)  
+    create(@Body() medico: Medico): Promise<Medico> {
         return this.medicoService.create(medico);
     }
-@Put()
-    @HttpCode(HttpStatus.OK)
-    update(@Body() medico: Postagem): Promise<Postagem> { 
+ 
+    @Put()
+    @HttpCode(HttpStatus.OK) 
+    update(@Body() medico: Medico): Promise<Medico> {
         return this.medicoService.update(medico);
     }
 
-@Patch(':id')
-    updatePartial(@Param('id', ParseIntPipe) id: number, 
-    @Body() dto: Partial<UpdateMedicoDto>): Promise<Medico> 
-    {
-        return this.medicoService.updatePartial(id, dto);
-    }
-
-@Delete()
+    @Delete('/:id')
     @HttpCode(HttpStatus.NO_CONTENT) 
     delete(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
         return this.medicoService.delete(id);
     }
 
-*/
+}
