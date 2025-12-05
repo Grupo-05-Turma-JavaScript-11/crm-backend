@@ -1,5 +1,5 @@
-import { IsNotEmpty, IsNumber, isNumber } from "class-validator"
-import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { IsNotEmpty, IsNumber} from "class-validator"
+import { Column, Entity, PrimaryGeneratedColumn} from "typeorm"
 
 
 @Entity({ name: "tb_medicos"  }) // Indicando que a classe é uma Entidade/Model
@@ -25,3 +25,4 @@ export class Medico {
     @Column({ length: 100, nullable: false  }) //Tamanho Máximo: 100 | Regra do MySQL - NOT NULL
     plantao: string
 }
+
