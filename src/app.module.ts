@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MedicoModule } from './medico/medico.module';
 import { Medico } from './medico/entities/medico.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { Medico } from './medico/entities/medico.entity';
       entities: [Medico],
       synchronize: true,
     }), 
-    MedicoModule
+    MedicoModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],
