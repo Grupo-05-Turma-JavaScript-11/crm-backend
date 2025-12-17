@@ -75,6 +75,17 @@ export class AtendimentoService {
         return await this.atendimentoRepository.save(atendimento)
   }
 
+  async atualizarStatus(id: number): Promise<Atendimento> {
+    const atendimento = await this.findById(id)
+
+    if (atendimento.status === 'ABERTO') {
+      atendimento.status = 'FINALIZADO'
+    }
+
+    return await this.atendimentoRepository.save(atendimento)
+  }
+
+
   async delete(id: number): Promise<DeleteResult> {
     const buscaAtendimento = await this.findById(id)
     // Se a postagem NÃO existir, mostre uma Exceção com o status: 404 Not Found
