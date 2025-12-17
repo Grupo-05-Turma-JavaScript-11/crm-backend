@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MedicoModule } from './medico/medico.module';
 import { Medico } from './medico/entities/medico.entity';
+import { Usuario } from './usuario/entities/usuario.entity';
+import { UsuarioModule } from './usuario/entities/usuario.module';
 
 @Module({
   imports: [
@@ -12,10 +14,11 @@ import { Medico } from './medico/entities/medico.entity';
       username: 'root',
       password: 'root',
       database: 'db_abgail',
-      entities: [Medico],
+      entities: [Medico, Usuario],
       synchronize: true,
     }), 
-    MedicoModule
+    MedicoModule,
+    UsuarioModule
   ],
   controllers: [],
   providers: [],
