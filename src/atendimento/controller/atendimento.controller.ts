@@ -24,7 +24,7 @@ export class AtendimentoController {
     return this.atendimentoService.findById(id);
   }
 
-  @Get("status/:status")
+  @Get("/status")
   @HttpCode(HttpStatus.OK)
   findByStatus(@Param("status") status: string): Promise<Atendimento[]> {
     return this.atendimentoService.findByStatus(status);
@@ -40,6 +40,12 @@ export class AtendimentoController {
   @HttpCode(HttpStatus.OK)
   update(@Body() atendimento: Atendimento): Promise<Atendimento> {
     return this.atendimentoService.update(atendimento);
+  }
+
+  @Put(':id/status')
+  @HttpCode(HttpStatus.OK)
+  atualizarStatus(@Param('id') id: number) {
+    return this.atendimentoService.atualizarStatus(id);
   }
 
   @Delete('/:id')
