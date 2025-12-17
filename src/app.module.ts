@@ -13,7 +13,7 @@ import { AuthModule } from './auth/auth.module';
       username: 'root',
       password: 'root',
       database: 'db_abgail',
-      entities: [Medico],
+      entities: [Medico, Usuario],
       synchronize: true,
     }), 
     MedicoModule,
