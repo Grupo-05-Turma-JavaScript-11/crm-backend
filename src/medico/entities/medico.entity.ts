@@ -25,4 +25,3 @@ export class Medico {
     @Column({ length: 100, nullable: false  }) //Tamanho Máximo: 100 | Regra do MySQL - NOT NULL
     turno_trabalho: string
 }
-
