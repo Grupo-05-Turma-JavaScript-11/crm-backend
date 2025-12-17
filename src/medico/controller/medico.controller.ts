@@ -1,10 +1,15 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, UseGuards } from "@nestjs/common";
 import { Medico } from "../entities/medico.entity";
 import { DeleteResult } from "typeorm";
 import { MedicoService } from "../services/medico.service";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { JwtAuthGuard } from "../../auth/guard/jwt-auth.guard";
 
 
-@Controller("/medicos")
+@ApiTags('Tema')
+@UseGuards(JwtAuthGuard)
+@Controller("/temas")
+@ApiBearerAuth()
 export class MedicoController{
     constructor(private readonly medicoService: MedicoService){}
 
