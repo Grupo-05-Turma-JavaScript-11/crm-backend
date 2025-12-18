@@ -12,14 +12,14 @@ export class UsuarioController{
 
     constructor(private readonly usuarioService: UsuarioService){ }
 
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @Get('/all')
     @HttpCode(HttpStatus.OK) 
     findAll(): Promise<Usuario[]>{
         return this.usuarioService.findAll();
     }
 
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @Get('/:id')
     @HttpCode(HttpStatus.OK)
     findById(@Param('id', ParseIntPipe) id: number): Promise<Usuario>{
@@ -32,7 +32,7 @@ export class UsuarioController{
         return this.usuarioService.create(usuario)
     }
 
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @Put('/atualizar')
     @HttpCode(HttpStatus.OK)
     async update(@Body() usuario: Usuario): Promise<Usuario>{

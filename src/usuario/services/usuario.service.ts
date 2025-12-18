@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from '../entities/usuario.entity';
 import { Bcrypt } from '../../auth/bcrypt/bcrypt'; // ✅ caminho conforme você mostrou
-import { UsuarioTipo } from '../enums/usuario-tipo.enum';
 import { JwtService } from '@nestjs/jwt'; // ✅ para gerar token (opcional, mas recomendado)
 
 @Injectable()
@@ -38,7 +37,7 @@ export class UsuarioService {
     if (buscaUsuario)
       throw new HttpException('O usuário já existe!', HttpStatus.BAD_REQUEST);
 
-    usuario.tipo = usuario.tipo ?? UsuarioTipo.USUARIO;
+    usuario.tipo = usuario.tipo;
 
     // hash da senha antes de salvar
     usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
@@ -58,8 +57,6 @@ export class UsuarioService {
     if (buscaUsuario && buscaUsuario.id !== usuario.id) {
       throw new HttpException('Usuário (e-mail) já cadastrado!', HttpStatus.BAD_REQUEST);
     }
-
-    usuario.tipo = usuario.tipo ?? UsuarioTipo.USUARIO;
 
     
     if (usuario.senha) {
@@ -95,16 +92,12 @@ export class UsuarioService {
       throw new UnauthorizedException('Email ou senha inválidos');
     }
 
-    // (Opcional) Gerar token JWT
-    const token = this.jwt.sign(
-      { sub: usuario.id, email: usuario.email, tipo: usuario.tipo },
-      { expiresIn: '1h' },
-    );
+    const payload = { sub: usuario.email };
 
     // Retornar dados seguros
     return {
       message: 'Autenticado',
-      token,
+      token: `Bearer ${this.jwt.sign(payload)}`,
       usuario: {
         id: usuario.id,
         nome: usuario.nome,
