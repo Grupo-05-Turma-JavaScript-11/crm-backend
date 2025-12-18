@@ -40,15 +40,15 @@ export class MedicoService {
     }
 
     async update(medico: Medico): Promise<Medico> {
-        // Chama o método findById anteriro para pesquisar uma postagem pelo id extraido do objeto postagem
+        // Chama o método findById anteriro para pesquisar um atendimento pelo id extraido do objeto atendimento
         let buscaMedico = await this.findById(medico.id);
 
-        // Se a postagem não existir, lace uma Exceção que vai direto para o Cliente com o status 404 Not Found
+        // Se o atendimento não existir, lace uma Exceção que vai direto para o Cliente com o status 404 Not Found
         if (!buscaMedico || !medico.id) {
             throw new HttpException('Médico não encontrado!', HttpStatus.NOT_FOUND);
         }
 
-        // Se a postagem foi encontrada, cadastra ela no BD e retorna ela
+        // Se o atendimento foi encontrado, cadastra ela no BD e retorna ela
         return await this.medicoRepository.save(medico);
     }
 

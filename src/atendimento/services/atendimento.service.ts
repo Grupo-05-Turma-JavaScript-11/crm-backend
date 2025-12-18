@@ -53,7 +53,7 @@ export class AtendimentoService {
       const medico = await this.medicoService.findById(atendimento.medico.id)
 
       if (!medico){
-        throw new HttpException('Medico não encontrada!', HttpStatus.NOT_FOUND)
+        throw new HttpException('Medico não encontrado!', HttpStatus.NOT_FOUND)
       }
     }
         return await this.atendimentoRepository.save(atendimento)
@@ -63,18 +63,19 @@ export class AtendimentoService {
     const buscaAtendimento: Atendimento = await this.findById(atendimento.id)
 
     if (!buscaAtendimento || !atendimento.id) {
-      throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND)
+      throw new HttpException('Atendimento não encontrado!', HttpStatus.NOT_FOUND)
     }
 
     if (atendimento.medico){
       const medico = await this.medicoService.findById(atendimento.medico.id)
       if (!medico){
-        throw new HttpException('Medico não encontrada!', HttpStatus.NOT_FOUND)
+        throw new HttpException('Medico não encontrado!', HttpStatus.NOT_FOUND)
         }
     }
         return await this.atendimentoRepository.save(atendimento)
   }
 
+  // Funcionalidade especial
   async atualizarStatus(id: number): Promise<Atendimento> {
     const atendimento = await this.findById(id)
 
@@ -88,12 +89,11 @@ export class AtendimentoService {
 
   async delete(id: number): Promise<DeleteResult> {
     const buscaAtendimento = await this.findById(id)
-    // Se a postagem NÃO existir, mostre uma Exceção com o status: 404 Not Found
+    // Se o atendimento NÃO existir, mostre uma Exceção com o status: 404 Not Found
     if (!buscaAtendimento){
       throw new HttpException('Atendimento não encontrado!', HttpStatus.NOT_FOUND)
     }
     return await this.atendimentoRepository.delete(id)
   }
 
-  //função especial
 }

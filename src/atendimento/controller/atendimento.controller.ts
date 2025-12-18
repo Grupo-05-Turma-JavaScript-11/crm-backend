@@ -5,9 +5,9 @@ import { DeleteResult } from 'typeorm';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 
-@ApiTags('Postagem')
+@ApiTags('Atendimento')
 @UseGuards(JwtAuthGuard)
-@Controller("/postagens")
+@Controller("/atendimentos")
 @ApiBearerAuth()
 export class AtendimentoController {
   constructor(private readonly atendimentoService: AtendimentoService) {}
