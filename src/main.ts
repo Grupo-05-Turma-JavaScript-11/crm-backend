@@ -9,7 +9,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
   .setTitle('Abgail')
   .setDescription('Projeto CRM')
-  .setContact("Projeto Integrador. ","Nosso GitHub: ", "https://github.com/Grupo-05-Turma-JavaScript-11/crm-backend")
+  .setContact("Nosso GitHub: ","https://github.com/Grupo-05-Turma-JavaScript-11/crm-backend", "https://github.com/Grupo-05-Turma-JavaScript-11/crm-backend")
   .setVersion('1.0')
   .addBearerAuth()
   .build();
