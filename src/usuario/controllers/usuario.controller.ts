@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, UseGuards } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, UseGuards } from "@nestjs/common";
 import { UsuarioService } from "../services/usuario.service";
 import { Usuario } from "../entities/usuario.entity";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
@@ -14,7 +14,7 @@ export class UsuarioController{
 
     @UseGuards(JwtAuthGuard)
     @Get('/all')
-    @HttpCode(HttpStatus.OK)    @HttpCode(HttpStatus.OK)
+    @HttpCode(HttpStatus.OK) 
     findAll(): Promise<Usuario[]>{
         return this.usuarioService.findAll();
     }
@@ -38,5 +38,18 @@ export class UsuarioController{
     async update(@Body() usuario: Usuario): Promise<Usuario>{
         return this.usuarioService.update(usuario)
     }
+    
+// ✅ Login público
+  @Post('/logar')
+  @HttpCode(HttpStatus.OK)
+  async logar(@Body() body: any) {
+    const { email, senha } = body || {};
+    if (!email || !senha) {
+      throw new BadRequestException('Campos "email" e "senha" são obrigatórios');
+    }
 
+    return this.usuarioService.logar(email, senha);
+  }
 }
+
+
