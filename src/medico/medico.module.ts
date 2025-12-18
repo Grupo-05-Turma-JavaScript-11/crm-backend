@@ -8,5 +8,6 @@ import { MedicoService } from './services/medico.service';
   imports: [TypeOrmModule.forFeature([Medico])],
   controllers: [MedicoController], 
   providers: [MedicoService],
+  exports: [MedicoService],
 })
 export class MedicoModule {}

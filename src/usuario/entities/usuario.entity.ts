@@ -2,6 +2,7 @@ import { IsEmail, IsNotEmpty, MinLength } from "class-validator"
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { Atendimento } from "../../atendimento/entities/atendimento.entity"
 import { ApiProperty } from "@nestjs/swagger"
+import { UsuarioTipo } from "../enums/usuario-tipo.enum"
 
 @Entity({name: "tb_usuarios"})
 export class Usuario {
@@ -9,7 +10,7 @@ export class Usuario {
     @PrimaryGeneratedColumn()
     @ApiProperty() 
     id: number
-
+    
     @IsNotEmpty()
     @Column({length: 255, nullable: false}) 
     @ApiProperty() 
@@ -30,6 +31,14 @@ export class Usuario {
     @Column({length: 255, nullable: false })
     @ApiProperty()
     senha: string
+
+    @Column({
+    type: 'enum',
+    enum: UsuarioTipo,
+    default: UsuarioTipo.USUARIO
+  })
+    @ApiProperty({enum: UsuarioTipo})
+    tipo: UsuarioTipo
 
     @ApiProperty()
     @OneToMany(() => Atendimento, (atendimento) => atendimento.usuario)
