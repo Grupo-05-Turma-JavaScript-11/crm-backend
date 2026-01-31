@@ -1,52 +1,51 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Medico } from '../../medico/entities/medico.entity';
+import { Paciente } from '../../paciente/entities/paciente.entity';
 import { IsNotEmpty } from 'class-validator';
 import { Usuario } from '../../usuario/entities/usuario.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 
-@Entity({ name: 'tb_atendimento' })
+@Entity({ name: "tb_atendimentos" })
 export class Atendimento {
 
   @PrimaryGeneratedColumn()
   @ApiProperty()
   id: number;
 
-  // Data do atendimento
+  // Datas
   @IsNotEmpty()
-  @Column({ type: 'date' })
-  @ApiProperty()
-  data: Date;
+  @Column({ type: "timestamp" })
+  @ApiProperty({ example: "2026-02-01T14:30:00" })
+  dataHora: Date;
 
-  // Status do atendimento (ABERTO, FINALIZADO, CANCELADO)
+  // Status
   @IsNotEmpty()
-  @Column({ length: 255 })
-  @ApiProperty()
+  @Column({ length: 20, default: "AGENDADO" })
+  @ApiProperty({ example: "AGENDADO | EM_TRATAMENTO | FINALIZADO | CANCELADO" })
   status: string;
 
-  // Motivo do atendimento
+  // Informações clínicas do evento
   @IsNotEmpty()
   @Column({ length: 255 })
-  @ApiProperty()
+  @ApiProperty({ example: "Consulta de rotina" })
   motivo: string;
 
-  // Valor estimado ou aprovado
-  @Column()
+  @Column({ type: "text", nullable: true })
   @ApiProperty()
-  valor: number;
+  observacao?: string;
 
-  // Observações gerais
-  @Column({ length: 255 })
-  @ApiProperty()
-  observacao: string;
+  // Financeiro
+  @Column({ length: 20, nullable: false })
+  @ApiProperty({ example: "PARTICULAR | CONVENIO" })
+  formaPagamento: string;
 
-  // Relacionamento: um médico pode ter vários atendimentos
-  @ApiProperty({ type: () => Medico })
-  @ManyToOne(() => Medico, (medico) => medico.atendimento)
-  medico: Medico
+  // Relacionamentos
 
-  // Relacionamento: // um usuario pode ter vários atendimento
+  @ApiProperty({ type: () => Paciente })
+  @ManyToOne(() => Paciente, paciente => paciente.atendimentos)
+  paciente: Paciente;
+
   @ApiProperty({ type: () => Usuario })
-  @ManyToOne(() => Usuario, usuario => usuario.atendimento)
-  usuario: Usuario
+  @ManyToOne(() => Usuario, usuario => usuario.atendimentos)
+  usuario: Usuario;
 }

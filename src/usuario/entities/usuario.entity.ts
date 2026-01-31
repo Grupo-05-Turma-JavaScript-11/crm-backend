@@ -2,40 +2,59 @@ import { IsEmail, IsNotEmpty, MinLength } from "class-validator"
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { Atendimento } from "../../atendimento/entities/atendimento.entity"
 import { ApiProperty } from "@nestjs/swagger"
+import { Paciente } from "../../paciente/entities/paciente.entity"
 
-@Entity({name: "tb_usuarios"})
+@Entity({ name: "tb_usuarios" })
 export class Usuario {
 
-    @PrimaryGeneratedColumn()
-    @ApiProperty() 
-    id: number
-    
-    @IsNotEmpty()
-    @Column({length: 255, nullable: false}) 
-    @ApiProperty() 
-    nome: string
+  @PrimaryGeneratedColumn()
+  @ApiProperty()
+  id: number;
 
-    @IsEmail()
-    @IsNotEmpty()
-    @Column({length: 255, nullable: false })
-    @ApiProperty({example: "email@email.com.br"}) 
-    email: string
+  // Identificação
+  @IsNotEmpty()
+  @Column({ length: 255, nullable: false })
+  @ApiProperty()
+  nome: string;
 
-    @Column({length: 5000 })
-    @ApiProperty() 
-    foto: string
+  @IsEmail()
+  @IsNotEmpty()
+  @Column({ length: 255, nullable: false, unique: true })
+  @ApiProperty({ example: "email@email.com.br" })
+  email: string;
 
-    @MinLength(8)
-    @IsNotEmpty()
-    @Column({length: 255, nullable: false })
-    @ApiProperty()
-    senha: string
+  // Autenticação
+  @MinLength(8)
+  @IsNotEmpty()
+  @Column({ length: 255, nullable: false, select: false })
+  @ApiProperty()
+  senha: string;
 
-    @Column({length: 20, nullable: false })
-    @ApiProperty()
-    tipo: string
+  // Registro profissional
+  @IsNotEmpty()
+  @Column({ length: 20, nullable: false, unique: true })
+  @ApiProperty({ example: "CRM-SP 123456" })
+  crm: string;
 
-    @ApiProperty()
-    @OneToMany(() => Atendimento, (atendimento) => atendimento.usuario)
-    atendimento: Atendimento[]
+  // Perfil / Permissão
+  @Column({ length: 20, nullable: false })
+  @ApiProperty({ example: "MEDICO | ADMIN" })
+  tipo: string;
+
+  @Column({ length: 5000, nullable: true })
+  @ApiProperty()
+  foto?: string;
+
+  // Relacionamentos ------
+
+  // Médico possui vários atendimentos
+  @ApiProperty({ type: () => Atendimento })
+  @OneToMany(() => Atendimento, atendimento => atendimento.usuario)
+  atendimentos: Atendimento[];
+
+  // Médico possui vários pacientes
+  @ApiProperty({ type: () => Paciente })
+  @OneToMany(() => Paciente, paciente => paciente.usuario)
+  pacientes: Paciente[];
+
 }

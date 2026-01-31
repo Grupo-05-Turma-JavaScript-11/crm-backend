@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MedicoModule } from './medico/medico.module';
+import { PacienteModule } from './paciente/paciente.module';
 import { AuthModule } from './auth/auth.module';
 import { AtendimentoModule } from './atendimento/atendimento.module';
 import { UsuarioModule } from './usuario/usuario.module';
@@ -15,7 +15,7 @@ import { ProdService } from './data/services/prod.service';
       useClass: ProdService,
       imports: [ConfigModule],
     }),
-    MedicoModule,
+    PacienteModule,
     AtendimentoModule,
     UsuarioModule,
     AuthModule,

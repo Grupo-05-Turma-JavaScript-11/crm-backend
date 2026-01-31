@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Atendimento } from './entities/atendimento.entity';
-import { AtendimentoController } from './controller/atendimento.controller';
 import { AtendimentoService } from './services/atendimento.service';
-import { MedicoModule } from '../medico/medico.module';
+import { PacienteModule } from '../paciente/paciente.module';
 import { UsuarioModule } from '../usuario/usuario.module';
+import { AtendimentoController } from './controllers/atendimento.controller';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Atendimento]),
-    MedicoModule,   
+    PacienteModule,   
     UsuarioModule,  
   ],
   controllers: [AtendimentoController],
