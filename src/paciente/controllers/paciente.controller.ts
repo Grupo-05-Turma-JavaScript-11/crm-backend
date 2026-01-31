@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { Paciente } from '../entities/paciente.entity';
@@ -16,6 +17,9 @@ import { DeleteResult } from 'typeorm';
 import { PacienteService } from '../services/paciente.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+import { Roles } from '../../usuario/decorator/roles.decorator';
+import { UsuarioTipo } from '../../usuario/entities/usuario.entity';
+import { RolesGuard } from '../../auth/guard/roles.guard';
 
 @ApiTags('Pacientes')
 @UseGuards(JwtAuthGuard)
@@ -43,10 +47,14 @@ export class PacienteController {
     return this.pacienteService.findAllByName(nome);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UsuarioTipo.ADMIN, UsuarioTipo.MEDICO) // Certifique-se que UsuarioTipo.MEDICO também possa se necessário
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() paciente: Paciente): Promise<Paciente> {
-    return this.pacienteService.create(paciente);
+  create(@Body() paciente: Paciente, @Req() req: any) {
+    // O 'req.user' contém os dados do médico logado (vindo do seu JWT Strategy)
+    const medicoId = req.user.id; 
+    return this.pacienteService.create(paciente, medicoId);
   }
 
   @Put()

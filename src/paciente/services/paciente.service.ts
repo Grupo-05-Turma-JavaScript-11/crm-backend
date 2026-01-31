@@ -65,11 +65,14 @@ export class PacienteService {
     return paciente.prontuario;
   }
 
-  async create(paciente: Paciente): Promise<Paciente> {
-    const novoPaciente = await this.pacienteRepository.save(paciente);
-    await this.prontuarioService.criarParaPaciente(novoPaciente);
-
-    return novoPaciente;
+  async create(dados: any, medicoId: number) {
+    // Criamos a instância unindo os dados do corpo com o ID do médico
+    const novoRegistro = this.pacienteRepository.create({
+      ...dados,
+      medico: { id: medicoId } // Isso cria o vínculo na coluna de relacionamento
+    });
+  
+    return await this.pacienteRepository.save(novoRegistro);
   }
 
   async update(paciente: Paciente): Promise<Paciente> {

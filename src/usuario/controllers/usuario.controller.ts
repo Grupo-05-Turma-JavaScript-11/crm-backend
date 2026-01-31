@@ -59,7 +59,6 @@ export class UsuarioController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UsuarioTipo.ADMIN)
   @Delete("/:id")
-  @Delete("/:id")
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(
     @Param('id', ParseIntPipe) id: number,
