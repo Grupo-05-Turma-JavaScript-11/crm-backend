@@ -16,8 +16,9 @@ export class PacienteService {
   constructor(
     @InjectRepository(Paciente)
     private pacienteRepository: Repository<Paciente>,
+    @InjectRepository(Prontuario)
     private prontuarioRepository: Repository<Prontuario>,
-    private prontuarioService: ProntuarioService,
+    private prontuarioService: ProntuarioService
   ) {}
 
   async findAll(): Promise<Paciente[]> {
