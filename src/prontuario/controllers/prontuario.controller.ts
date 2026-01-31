@@ -28,7 +28,7 @@ export class ProntuarioController {
     return this.prontuarioService.buscarPorPaciente(id);
   }
 
-  @Get('/prontuarios/buscar/nome/:nome')
+  @Get('/prontuarios/buscar/:nome')
   @HttpCode(HttpStatus.OK)
   buscarPorNomePaciente(@Param('nome') nome: string): Promise<Prontuario[]> {
     return this.prontuarioService.buscarPorNomePaciente(nome);
