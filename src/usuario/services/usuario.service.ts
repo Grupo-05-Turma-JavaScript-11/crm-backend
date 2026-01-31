@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from '../entities/usuario.entity';
@@ -73,7 +73,10 @@ export class UsuarioService {
     return safe;
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number, usuarioLogadoId?: number): Promise<void> {
+    if (id === usuarioLogadoId) {
+      throw new BadRequestException("Um administrador não pode excluir a própria conta.");
+    }
     await this.findById(id);
     await this.usuarioRepository.delete(id);
   }

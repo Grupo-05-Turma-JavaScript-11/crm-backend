@@ -4,6 +4,12 @@ import { Atendimento } from "../../atendimento/entities/atendimento.entity"
 import { ApiProperty } from "@nestjs/swagger"
 import { Paciente } from "../../paciente/entities/paciente.entity"
 
+export enum UsuarioTipo {
+  ADMIN = 'ADMIN',
+  MEDICO = 'MEDICO',
+  ASSISTENTE = 'ASSISTENTE',
+}
+
 @Entity({ name: "tb_usuarios" })
 export class Usuario {
 
@@ -36,11 +42,6 @@ export class Usuario {
   @ApiProperty({ example: "CRM-SP 123456" })
   crm: string;
 
-  // Perfil / Permissão
-  @Column({ length: 20, nullable: false })
-  @ApiProperty({ example: "MEDICO | ADMIN" })
-  tipo: string;
-
   @Column({ length: 5000, nullable: true })
   @ApiProperty()
   foto?: string;
@@ -56,5 +57,16 @@ export class Usuario {
   @ApiProperty({ type: () => Paciente })
   @OneToMany(() => Paciente, paciente => paciente.usuario)
   pacientes: Paciente[];
+
+  // Permissões ----
+  @IsNotEmpty()
+  @Column({ 
+    type: "varchar", 
+    length: 20, 
+    nullable: false, 
+    default: UsuarioTipo.MEDICO 
+  })
+  @ApiProperty({ enum: UsuarioTipo, example: UsuarioTipo.MEDICO + " | " + UsuarioTipo.ASSISTENTE})
+  tipo: UsuarioTipo;
 
 }
