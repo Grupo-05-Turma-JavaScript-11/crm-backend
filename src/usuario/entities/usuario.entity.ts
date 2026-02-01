@@ -40,7 +40,7 @@ export class Usuario {
   @IsNotEmpty()
   @Column({ length: 20, nullable: false, unique: true })
   @ApiProperty({ example: "CRM-SP 123456" })
-  crm: string;
+  crm?: string;
 
   @Column({ length: 5000, nullable: true })
   @ApiProperty()
@@ -60,12 +60,7 @@ export class Usuario {
 
   // Permissões ----
   @IsNotEmpty()
-  @Column({ 
-    type: "varchar", 
-    length: 20, 
-    nullable: false, 
-    default: UsuarioTipo.MEDICO 
-  })
+  @Column({   type: "varchar", length: 20,  nullable: false,  default: UsuarioTipo.MEDICO })
   @ApiProperty({ enum: UsuarioTipo, example: UsuarioTipo.MEDICO + " | " + UsuarioTipo.ASSISTENTE})
   tipo: UsuarioTipo;
 
