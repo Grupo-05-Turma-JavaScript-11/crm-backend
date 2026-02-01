@@ -15,7 +15,7 @@ import { UsuarioModule } from "../usuario/usuario.module";
         PassportModule,
         JwtModule.register({
             secret: jwtConstants.secret,
-            signOptions: {expiresIn: '1h'},
+            signOptions: {expiresIn: '24h'},
         })
 
     ],

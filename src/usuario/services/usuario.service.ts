@@ -15,7 +15,10 @@ export class UsuarioService {
   ) {}
 
   async findByEmail(email: string): Promise<Usuario | null> {
-    return await this.usuarioRepository.findOne({ where: { email } });
+    return await this.usuarioRepository.findOne({ 
+      where: { email },
+      select: ['id', 'nome', 'email', 'senha', 'tipo', 'foto'] // Força a busca da senha aqui
+    });
   }
 
   async findAll(): Promise<Usuario[]> {
