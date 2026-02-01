@@ -37,7 +37,7 @@ export class Usuario {
   senha: string;
 
   // Registro profissional
-  @Column({ length: 20, nullable: false, unique: true })
+  @Column({ length: 20, unique: false, nullable: true })
   @ApiProperty({ example: "CRM-SP 123456" })
   crm?: string;
 
