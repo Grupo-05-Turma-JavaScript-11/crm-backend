@@ -103,7 +103,7 @@ export class AtendimentoService {
   
     switch (atendimento.status) {
       case 'AGENDADO':
-        atendimento.status = 'EM_TRATAMENTO';
+        atendimento.status = 'EM TRATAMENTO';
         break;
   
       case 'EM_TRATAMENTO':

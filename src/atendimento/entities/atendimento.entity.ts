@@ -21,7 +21,7 @@ export class Atendimento {
   // Status
   @IsNotEmpty()
   @Column({ length: 20, default: "AGENDADO" })
-  @ApiProperty({ example: "AGENDADO | EM_TRATAMENTO | FINALIZADO | CANCELADO" })
+  @ApiProperty({ example: "AGENDADO | EM TRATAMENTO | FINALIZADO | CANCELADO" })
   status: string;
 
   // Informações clínicas do evento
