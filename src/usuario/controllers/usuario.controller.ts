@@ -22,7 +22,6 @@ import { Roles } from '../decorator/roles.decorator';
 
 @ApiTags('Usuario')
 @Controller('/usuarios')
-@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
