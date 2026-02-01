@@ -1,4 +1,17 @@
-import { Controller, Post, Get, Body, HttpCode, HttpStatus, ParseIntPipe, Param, Put, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  HttpCode,
+  HttpStatus,
+  ParseIntPipe,
+  Param,
+  Put,
+  Delete,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { AtendimentoService } from '../services/atendimento.service';
 import { Atendimento } from '../../atendimento/entities/atendimento.entity';
 import { DeleteResult } from 'typeorm';
@@ -7,7 +20,7 @@ import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 
 @ApiTags('Atendimento')
 @UseGuards(JwtAuthGuard)
-@Controller("/atendimentos")
+@Controller('/atendimentos')
 @ApiBearerAuth()
 export class AtendimentoController {
   constructor(private readonly atendimentoService: AtendimentoService) {}
@@ -24,16 +37,24 @@ export class AtendimentoController {
     return this.atendimentoService.findById(id);
   }
 
-  @Get("/status")
+  @Get('/status')
   @HttpCode(HttpStatus.OK)
-  findByStatus(@Param("status") status: string): Promise<Atendimento[]> {
+  findByStatus(@Param('status') status: string): Promise<Atendimento[]> {
     return this.atendimentoService.findByStatus(status);
   }
 
-  @Get("/paciente/:nome")
+  @Get('/paciente/:nome')
   @HttpCode(HttpStatus.OK)
-  findByPaciente(@Param("nome") nome: string): Promise<Atendimento[]> {
+  findByPaciente(@Param('nome') nome: string): Promise<Atendimento[]> {
     return this.atendimentoService.findByPaciente(nome);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/meus-atendimentos')
+  @HttpCode(HttpStatus.OK)
+  findMyAtendimentos(@Req() req: any): Promise<Atendimento[]> {
+    const usuarioId = req.user.id;
+    return this.atendimentoService.findByUsuario(usuarioId);
   }
 
   @Post()
@@ -56,7 +77,7 @@ export class AtendimentoController {
 
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult>{
+  delete(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
     return this.atendimentoService.delete(id);
   }
 }

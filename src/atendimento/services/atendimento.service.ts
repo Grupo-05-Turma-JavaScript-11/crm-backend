@@ -48,6 +48,18 @@ export class AtendimentoService {
     })
   }
 
+  async findByUsuario(usuarioId: number): Promise<Atendimento[]> {
+    return await this.atendimentoRepository.find({
+        where: {
+            usuario: { id: usuarioId } // Filtra pelo relacionamento
+        },
+        relations: { 
+          paciente: true,
+          usuario: true
+        } // Opcional: traz os dados do paciente junto
+    });
+}
+
  async findByStatus(status: string): Promise<Atendimento[]> {
     return await this.atendimentoRepository.find({
       where:{ status: ILike(`%${status}%`) },
