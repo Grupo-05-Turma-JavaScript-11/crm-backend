@@ -65,13 +65,9 @@ export class PacienteService {
     return paciente.prontuario;
   }
 
-  async create(dados: any, medicoId: number) {
-    // Criamos a instância unindo os dados do corpo com o ID do médico
-    const novoRegistro = this.pacienteRepository.create({
-      ...dados,
-      medico: { id: medicoId } // Isso cria o vínculo na coluna de relacionamento
-    });
-  
+  async create(dados: Paciente): Promise<Paciente> {
+    // Agora o repositório salva exatamente o que vier do Controller
+    const novoRegistro = this.pacienteRepository.create(dados);
     return await this.pacienteRepository.save(novoRegistro);
   }
 

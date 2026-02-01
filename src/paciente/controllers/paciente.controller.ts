@@ -47,14 +47,12 @@ export class PacienteController {
     return this.pacienteService.findAllByName(nome);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UsuarioTipo.ADMIN, UsuarioTipo.MEDICO) // Certifique-se que UsuarioTipo.MEDICO também possa se necessário
+  @UseGuards(JwtAuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() paciente: Paciente, @Req() req: any) {
-    // O 'req.user' contém os dados do médico logado (vindo do seu JWT Strategy)
-    const medicoId = req.user.id; 
-    return this.pacienteService.create(paciente, medicoId);
+  create(@Body() paciente: Paciente) { // Removido o @Req() req
+    // Passamos apenas o objeto 'paciente' que veio do Body
+    return this.pacienteService.create(paciente);
   }
 
   @Put()

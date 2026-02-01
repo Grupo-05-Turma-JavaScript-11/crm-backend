@@ -51,12 +51,12 @@ export class Usuario {
   // Médico possui vários atendimentos
   @ApiProperty({ type: () => Atendimento })
   @OneToMany(() => Atendimento, atendimento => atendimento.usuario)
-  atendimentos: Atendimento[];
+  atendimentos?: Atendimento[];
 
   // Médico possui vários pacientes
   @ApiProperty({ type: () => Paciente })
   @OneToMany(() => Paciente, paciente => paciente.usuario)
-  pacientes: Paciente[];
+  pacientes?: Paciente[];
 
   // Permissões ----
   @IsNotEmpty()
