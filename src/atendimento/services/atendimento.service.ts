@@ -38,6 +38,16 @@ export class AtendimentoService {
     return atendimento
   }
 
+  async findByPaciente(nome: string): Promise<Atendimento[]> {
+    return await this.atendimentoRepository.find({
+      where: { paciente: { nome: ILike(`%${nome}%`) } },
+      relations:{ 
+        paciente: true,
+        usuario: true
+      }
+    })
+  }
+
  async findByStatus(status: string): Promise<Atendimento[]> {
     return await this.atendimentoRepository.find({
       where:{ status: ILike(`%${status}%`) },

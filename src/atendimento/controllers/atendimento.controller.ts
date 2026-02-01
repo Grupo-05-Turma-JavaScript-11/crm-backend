@@ -30,6 +30,12 @@ export class AtendimentoController {
     return this.atendimentoService.findByStatus(status);
   }
 
+  @Get("/paciente/:nome")
+  @HttpCode(HttpStatus.OK)
+  findByPaciente(@Param("nome") nome: string): Promise<Atendimento[]> {
+    return this.atendimentoService.findByPaciente(nome);
+  }
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() atendimento: Atendimento): Promise<Atendimento> {
