@@ -11,7 +11,8 @@ async function bootstrap() {
   .setDescription('Projeto CRM')
   .setContact("Nosso GitHub: ","https://github.com/Grupo-05-Turma-JavaScript-11/crm-backend", "https://github.com/Grupo-05-Turma-JavaScript-11/crm-backend")
   .setVersion('1.0')
-  .addBearerAuth()
+  .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+    'access-token',)
   .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/swagger', app, document);

@@ -103,7 +103,7 @@ export class UsuarioService {
     // Retornar dados seguros
     return {
       message: 'Autenticado',
-      token: `Bearer ${this.jwt.sign(payload)}`,
+      token: `${this.jwt.sign(payload)}`,
       usuario: {
         id: usuario.id,
         nome: usuario.nome,
