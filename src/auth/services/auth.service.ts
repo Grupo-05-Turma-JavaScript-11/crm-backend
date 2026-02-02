@@ -32,39 +32,26 @@ export class AuthService {
   }
 
   async login(usuarioLogin: UsuarioLogin) {
-    const buscaUsuario = await this.usuarioService.findByEmail(
-      usuarioLogin.email,
-    );
+    // Aqui criamos um objeto na qual terá um atributo chamado sub e recebe o email do corpo da requisição
+    const payload = { sub: usuarioLogin.email }
 
-    if (!buscaUsuario)
-      throw new HttpException('Usuário não encontrado!', HttpStatus.NOT_FOUND);
+    /*
+        objeto que vem pelo corpo da requisição => usuarioLogin = { usuario: "email@email.com", senha: "12345678" }
+        objeto criado => payload = { sub: "email@email.com"}
+    */
 
-    const senhaValida = await this.bcrypt.compararSenhas(
-      usuarioLogin.senha,
-      buscaUsuario.senha,
-    );
+    const buscaUsuario = await this.usuarioService.findByEmail(usuarioLogin.email)
 
-    if (!senhaValida) {
-      throw new HttpException(
-        'Email ou senha inválidos!',
-        HttpStatus.UNAUTHORIZED,
-      );
+    // Retorna um objeto com os dados do usuário caso o login for bem sucedido
+    return {
+        id: buscaUsuario?.id,   // Colocamos ? pois o buscaUsuario pode retornar nulo. Caso existir (?) tenta acessar o id
+        nome: buscaUsuario?.nome,
+        email: usuarioLogin.email,
+        senha: '',
+        tipo: buscaUsuario?.tipo,
+        foto: buscaUsuario?.foto,
+        token: `Bearer ${this.jwtService.sign(payload)}`,   // Cria o Token JWT, criptografando alguns dados como o email do usuário que acabou de logar
     }
 
-    const payload = {
-      sub: buscaUsuario.email,
-      id: buscaUsuario.id,
-      tipo: buscaUsuario.tipo,
-    };
-
-    return {
-      id: buscaUsuario.id,
-      nome: buscaUsuario.nome,
-      email: buscaUsuario.email,
-      senha: '',
-      tipo: buscaUsuario.tipo,
-      foto: buscaUsuario?.foto,
-      token: this.jwtService.sign(payload),
-    };
-  }
+}
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from '../entities/usuario.entity';
@@ -52,36 +52,54 @@ export class UsuarioService {
     return safe;
   }
 
-  async update(usuario: Usuario): Promise<Usuario> {
-    await this.findById(usuario.id);
-
-    const buscaUsuario = await this.findByEmail(usuario.email);
-
-    if (buscaUsuario && buscaUsuario.id !== usuario.id) {
-      throw new HttpException('Usuário (e-mail) já cadastrado!', HttpStatus.BAD_REQUEST);
+  async update(usuario: Usuario, usuarioLogado: Usuario): Promise<Usuario> {
+    // Busca os dados atuais do usuário que será editado
+    const buscarUsuario = await this.findById(usuario.id);
+  
+    // REGRA DE SEGURANÇA:
+    // Se quem está logado NÃO for ADMIN e tentar mudar o 'tipo', barramos.
+    if (usuario.tipo && usuario.tipo !== buscarUsuario.tipo && usuarioLogado.tipo !== "ADMIN") {
+      throw new HttpException(
+        "Você não tem permissão para alterar o nível de acesso (tipo).", 
+        HttpStatus.FORBIDDEN
+      );
     }
-
-    
+  
+    // REGRA DE SEGURANÇA:
+    // Se quem está logado NÃO for ADMIN e tentar editar OUTRO usuário, barramos.
+    if (usuarioLogado.tipo !== "ADMIN" && usuarioLogado.id !== usuario.id) {
+      throw new HttpException(
+        "Você só pode atualizar o seu próprio perfil.", 
+        HttpStatus.FORBIDDEN
+      );
+    }
+  
+    // Tratamento da Senha
     if (usuario.senha) {
       usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
     } else {
-      
-      const atual = await this.findById(usuario.id);
-      usuario.senha = atual.senha;
+      usuario.senha = buscarUsuario.senha;
     }
-
+  
     const salvo = await this.usuarioRepository.save(usuario);
-
+  
     const { senha, ...safe } = salvo as any;
     return safe;
   }
 
-  async delete(id: number, usuarioLogadoId?: number): Promise<void> {
-    if (id === usuarioLogadoId) {
+  async delete(idParaDeletar: number, usuarioLogado: Usuario): Promise<void> {
+    // Regra de Ouro: Apenas ADMIN pode deletar
+    if (usuarioLogado.tipo !== "ADMIN") {
+      throw new UnauthorizedException("Apenas administradores podem realizar esta operação.");
+    }
+  
+    // Regra extra: Um admin não pode se auto-excluir
+    if (idParaDeletar === usuarioLogado.id) {
       throw new BadRequestException("Um administrador não pode excluir a própria conta.");
     }
-    await this.findById(id);
-    await this.usuarioRepository.delete(id);
+  
+    const usuario = await this.findById(idParaDeletar);
+    await this.usuarioRepository.remove(usuario);
   }
 
 }

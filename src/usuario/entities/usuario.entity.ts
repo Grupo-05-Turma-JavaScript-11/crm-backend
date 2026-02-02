@@ -4,11 +4,7 @@ import { Atendimento } from "../../atendimento/entities/atendimento.entity"
 import { ApiProperty } from "@nestjs/swagger"
 import { Paciente } from "../../paciente/entities/paciente.entity"
 
-export enum UsuarioTipo {
-  ADMIN = 'ADMIN',
-  MEDICO = 'MEDICO',
-  ASSISTENTE = 'ASSISTENTE',
-}
+export type UsuarioTipo  =  "ADMIN" | "MEDICO" | "ASSISTENTE"
 
 @Entity({ name: "tb_usuarios" })
 export class Usuario {
@@ -59,8 +55,8 @@ export class Usuario {
 
   // Permissões ----
   @IsNotEmpty()
-  @Column({   type: "varchar", length: 20,  nullable: false,  default: UsuarioTipo.MEDICO })
-  @ApiProperty({ enum: UsuarioTipo, example: UsuarioTipo.MEDICO + " | " + UsuarioTipo.ASSISTENTE})
+  @Column({   type: "varchar", length: 20,  nullable: false,  default: "MEDICO" })
+  @ApiProperty({ example: "ADMIN | MEDICO | ASSISTENTE" })
   tipo: UsuarioTipo;
 
 }

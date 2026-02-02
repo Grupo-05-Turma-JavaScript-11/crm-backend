@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -14,11 +13,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsuarioService } from '../services/usuario.service';
-import { Usuario, UsuarioTipo } from '../entities/usuario.entity';
+import { Usuario } from '../entities/usuario.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
-import { RolesGuard } from '../../auth/guard/roles.guard';
-import { Roles } from '../decorator/roles.decorator';
+
 
 @ApiTags('Usuario')
 @Controller('/usuarios')
@@ -26,8 +24,7 @@ import { Roles } from '../decorator/roles.decorator';
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UsuarioTipo.ADMIN, UsuarioTipo.MEDICO)
+  @UseGuards(JwtAuthGuard)
   @Get('/all')
   @HttpCode(HttpStatus.OK)
   findAll(): Promise<Usuario[]> {
@@ -47,23 +44,25 @@ export class UsuarioController {
     return this.usuarioService.create(usuario);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard) // Adicione o RolesGuard aqui
-  @Roles(UsuarioTipo.ADMIN)
+  @UseGuards(JwtAuthGuard) // Obrigatório para o req.user funcionar
   @Put('/atualizar')
   @HttpCode(HttpStatus.OK)
-  async update(@Body() usuario: Usuario): Promise<Usuario> {
-    return this.usuarioService.update(usuario);
+  async update(
+    @Body() usuario: Usuario, 
+    @Request() req: any
+  ): Promise<Usuario> {
+    // Passamos o corpo (usuario) e quem está logado (req.user)
+    return this.usuarioService.update(usuario, req.user);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UsuarioTipo.ADMIN)
+  @UseGuards(JwtAuthGuard) // Aqui não precisa do RolesGuard, o Service resolve
   @Delete("/:id")
-  @HttpCode(HttpStatus.NO_CONTENT)
   async delete(
     @Param('id', ParseIntPipe) id: number,
-    @Request() req: any // Injetar o request para saber quem está deletando
+    @Request() req: any 
   ): Promise<void> {
-    await this.usuarioService.delete(id, req.user.id);
+    // Passamos o usuário inteiro (ou só o tipo) para o service
+    await this.usuarioService.delete(id, req.user);
   }
 
 }
