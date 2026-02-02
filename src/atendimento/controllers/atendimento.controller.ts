@@ -63,9 +63,14 @@ export class AtendimentoController {
     return this.atendimentoService.create(atendimento);
   }
 
-  @Put()
+  @Put('/:id') // Define que o ID vem na URL
   @HttpCode(HttpStatus.OK)
-  update(@Body() atendimento: Atendimento): Promise<Atendimento> {
+  async update(
+    @Param('id', ParseIntPipe) id: number, // Captura e valida se o ID é número
+    @Body() atendimento: Atendimento
+  ): Promise<Atendimento> {
+    // Garantimos que o ID da URL seja atribuído ao objeto antes de enviar ao Service
+    atendimento.id = id; 
     return this.atendimentoService.update(atendimento);
   }
 

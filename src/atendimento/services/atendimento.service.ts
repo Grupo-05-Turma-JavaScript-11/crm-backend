@@ -82,19 +82,31 @@ export class AtendimentoService {
   }
 
   async update(atendimento: Atendimento): Promise<Atendimento> {
-    const buscaAtendimento: Atendimento = await this.findById(atendimento.id)
-
-    if (!buscaAtendimento || !atendimento.id) {
-      throw new HttpException('Atendimento não encontrado!', HttpStatus.NOT_FOUND)
+    // 1. Verifica se o ID foi fornecido
+    if (!atendimento.id) {
+      throw new HttpException('ID do atendimento é obrigatório!', HttpStatus.BAD_REQUEST);
     }
-
-    if (atendimento.paciente){
-      const paciente = await this.pacienteService.findById(atendimento.paciente.id)
-      if (!paciente){
-        throw new HttpException('Paciente não encontrado!', HttpStatus.NOT_FOUND)
-        }
+  
+    // 2. Busca o registro existente no banco
+    const buscaAtendimento = await this.findById(atendimento.id);
+  
+    if (!buscaAtendimento) {
+      throw new HttpException('Atendimento não encontrado!', HttpStatus.NOT_FOUND);
     }
-        return await this.atendimentoRepository.save(atendimento)
+  
+    // 3. Validação do Paciente (se houver alteração de paciente)
+    if (atendimento.paciente && atendimento.paciente.id) {
+      const paciente = await this.pacienteService.findById(atendimento.paciente.id);
+      if (!paciente) {
+        throw new HttpException('Paciente informado não existe!', HttpStatus.NOT_FOUND);
+      }
+    }
+  
+    // 4. Merge e Save
+    // O preload ou o merge garantem que os campos não enviados mantenham os valores originais
+    const atendimentoAtualizado = this.atendimentoRepository.merge(buscaAtendimento, atendimento);
+    
+    return await this.atendimentoRepository.save(atendimentoAtualizado);
   }
 
   // Funcionalidade especial
