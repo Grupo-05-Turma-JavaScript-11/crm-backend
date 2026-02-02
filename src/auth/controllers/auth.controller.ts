@@ -1,5 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
-import { LocalAuthGuard } from '../guard/local-auth.guard';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { UsuarioLogin } from './../entities/usuariologin.entity';
 import { ApiTags } from '@nestjs/swagger';
@@ -7,13 +6,11 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('Usuario')
 @Controller("/usuarios")
 export class AuthController {
-    constructor(private authService: AuthService) { }
+    constructor(private authService: AuthService) {}
 
-    @UseGuards(LocalAuthGuard)
     @HttpCode(HttpStatus.OK)
     @Post('/logar')
-    login(@Body() usuario: UsuarioLogin): Promise<any> {
-        return this.authService.login(usuario);
+    async login(@Body() usuario: UsuarioLogin) {
+        return await this.authService.login(usuario);
     }
-
 }

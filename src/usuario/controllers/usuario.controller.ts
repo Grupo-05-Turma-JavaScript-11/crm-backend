@@ -66,17 +66,4 @@ export class UsuarioController {
     await this.usuarioService.delete(id, req.user.id);
   }
 
-  // Login público
-  @Post('/logar')
-  @HttpCode(HttpStatus.OK)
-  async logar(@Body() body: any) {
-    const { email, senha } = body || {};
-    if (!email || !senha) {
-      throw new BadRequestException(
-        'Campos "email" e "senha" são obrigatórios',
-      );
-    }
-
-    return this.usuarioService.logar(email, senha);
-  }
 }

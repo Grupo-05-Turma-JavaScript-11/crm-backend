@@ -84,31 +84,4 @@ export class UsuarioService {
     await this.usuarioRepository.delete(id);
   }
 
-  // ✅ NOVO: método de login usado pelo controller
-  async logar(email: string, senhaPlain: string) {
-    const usuario = await this.findByEmail(email);
-    if (!usuario) throw new UnauthorizedException('Email ou senha inválidos');
-
-    const ok = await this.bcrypt.compararSenhas(senhaPlain, usuario.senha);
-    if (!ok) throw new UnauthorizedException('Email ou senha inválidos');
-
-    // ADICIONE id e tipo AQUI para que os Guards funcionem!
-    const payload = { 
-        sub: usuario.email, 
-        id: usuario.id, 
-        tipo: usuario.tipo 
-    };
-
-    return {
-        message: 'Autenticado',
-        token: this.jwt.sign(payload), // Token puro sem "Bearer "
-        usuario: {
-            id: usuario.id,
-            nome: usuario.nome,
-            email: usuario.email,
-            tipo: usuario.tipo,
-            foto: usuario.foto,
-        },
-    };
-}
 }
