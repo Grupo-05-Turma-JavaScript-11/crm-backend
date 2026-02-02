@@ -21,7 +21,7 @@ import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 @ApiTags('Pacientes')
 @UseGuards(JwtAuthGuard)
 @Controller('/pacientes')
-@ApiBearerAuth()
+@ApiBearerAuth('access-token')
 export class PacienteController {
   constructor(private readonly pacienteService: PacienteService) {}
 

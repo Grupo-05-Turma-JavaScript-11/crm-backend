@@ -20,7 +20,7 @@ import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 
 @ApiTags('Usuario')
 @Controller('/usuarios')
-@ApiBearerAuth()
+@ApiBearerAuth("access-token")
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
 

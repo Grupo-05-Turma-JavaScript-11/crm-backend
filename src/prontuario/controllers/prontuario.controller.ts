@@ -17,7 +17,7 @@ import Prontuario from '../entities/prontuario.entity';
 @ApiTags('Prontuário')
 @UseGuards(JwtAuthGuard)
 @Controller('/pacientes')
-@ApiBearerAuth()
+@ApiBearerAuth("access-token")
 export class ProntuarioController {
   constructor(private readonly prontuarioService: ProntuarioService) {}
 
