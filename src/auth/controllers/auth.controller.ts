@@ -4,13 +4,22 @@ import { UsuarioLogin } from './../entities/usuariologin.entity';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Usuario')
-@Controller("/usuarios")
+@Controller('/usuarios')
 export class AuthController {
-    constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
-    @HttpCode(HttpStatus.OK)
-    @Post('/logar')
-    async login(@Body() usuario: UsuarioLogin) {
-        return await this.authService.login(usuario);
+  @HttpCode(HttpStatus.OK)
+  @Post('/logar')
+  async login(@Body() usuarioLogin: UsuarioLogin) {
+    const usuarioValidado = await this.authService.validateUser(
+      usuarioLogin.email,
+      usuarioLogin.senha,
+    );
+
+    if (!usuarioValidado) {
+      throw new HttpException('Credenciais inválidas', HttpStatus.UNAUTHORIZED);
     }
+
+    return this.authService.login(usuarioLogin);
+  }
 }
