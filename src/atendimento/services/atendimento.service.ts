@@ -118,7 +118,7 @@ export class AtendimentoService {
         atendimento.status = 'EM TRATAMENTO';
         break;
   
-      case 'EM_TRATAMENTO':
+      case 'EM TRATAMENTO':
         atendimento.status = 'FINALIZADO';
         break;
   
