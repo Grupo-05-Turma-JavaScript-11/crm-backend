@@ -76,7 +76,7 @@ export class AtendimentoController {
 
   @Put(':id/status')
   @HttpCode(HttpStatus.OK)
-  atualizarStatus(@Param('id') id: number) {
+  atualizarStatus(@Param('id', ParseIntPipe) id: number) {
     return this.atendimentoService.atualizarStatus(id);
   }
 
